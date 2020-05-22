@@ -17,6 +17,7 @@ struct ContentView: View {
         HStack {
             ForEach(viewModel.cards) { card in
                 CardView(card: card)
+                    .aspectRatio(2/3, contentMode: .fit)
                     .onTapGesture {
                         self.viewModel.choose(card: card)
                 }
@@ -24,7 +25,7 @@ struct ContentView: View {
         }
         .padding()
         .foregroundColor(Color.orange)
-        .font(Font.largeTitle)
+        .font(self.viewModel.cards.count == 5 ? Font.title : Font.largeTitle)
 
     }
 }
