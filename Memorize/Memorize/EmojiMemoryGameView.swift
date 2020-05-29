@@ -1,5 +1,5 @@
 //
-//  ContentView.swift
+//  EmojiMemoryGameView.swift
 //  Memorize
 //
 //  Created by Vladislav Jidkov on 2020-05-19.
@@ -8,9 +8,9 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct EmojiMemoryGameView: View {
     
-    var viewModel: EmojiMemoryGame
+    @ObservedObject var viewModel: EmojiMemoryGame
     
     var body: some View {
         
@@ -25,8 +25,6 @@ struct ContentView: View {
         }
         .padding()
         .foregroundColor(Color.orange)
-        .font(self.viewModel.cards.count == 5 ? Font.title : Font.largeTitle)
-
     }
 }
 
@@ -34,25 +32,41 @@ struct CardView: View {
     
     var card: MemoryGame<String>.Card
     
-    
     var body: some View {
+        GeometryReader { geometry in
+            self.body(for: geometry.size)
+        }
+    }
+    
+    func body(for size: CGSize) -> some View {
         ZStack {
             if card.isFaceUp {
-                RoundedRectangle(cornerRadius: 10.0)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(Color.white)
-                RoundedRectangle(cornerRadius: 10.0)
-                    .stroke()
+                RoundedRectangle(cornerRadius: cornerRadius)
+                    .stroke(lineWidth: edgeWidth)
                 Text(card.content)
             } else {
-                RoundedRectangle(cornerRadius: 10.0)
+                RoundedRectangle(cornerRadius: cornerRadius)
                     .fill(Color.orange)
             }
         }
+        .font(Font.system(size: fontSize(for: size)))
+    }
+    
+    // MARK: - Drawing Constants
+    
+    let cornerRadius: CGFloat = 10.0
+    let fontScaleFactor: CGFloat = 0.75
+    let edgeWidth: CGFloat = 3
+    
+    func fontSize(for size: CGSize) -> CGFloat {
+        min(size.width, size.height) * fontScaleFactor
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        return ContentView(viewModel: EmojiMemoryGame())
+        return EmojiMemoryGameView(viewModel: EmojiMemoryGame())
     }
 }

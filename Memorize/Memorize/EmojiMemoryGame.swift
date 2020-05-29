@@ -9,14 +9,14 @@
 import SwiftUI
 
 
-class EmojiMemoryGame {
-    private var game: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
+class EmojiMemoryGame: ObservableObject {
+    @Published private var game: MemoryGame<String> = EmojiMemoryGame.createMemoryGame()
     
     static func createMemoryGame() -> MemoryGame<String> {
         let emojis: Array<String> = ["👻", "🎃", "🕷", "🕸", "😈", "👿", "🙀", "👹", "👺", "🗝", "💀", "🏴‍☠️"].shuffled()
         return MemoryGame<String>(numberOfPairsOfCards: Int.random(in: 2...emojis.count), cardContentFactory: { (pairIndex: Int) -> String in return emojis[pairIndex]})
     }
-    
+        
     var cards: Array<MemoryGame<String>.Card> {
         return game.cards
     }
